@@ -1,6 +1,7 @@
 import asyncio
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
+from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 from app.config import load_settings
 from app.checker import State, check_loop
 
@@ -21,3 +22,7 @@ def health():
 @app.get("/results")
 def results():
     return state.last_results
+
+@app.get("/metrics")
+def metrics():
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
