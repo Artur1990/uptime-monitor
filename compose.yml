@@ -8,6 +8,13 @@ services:
       CONFIG_PATH: config/targets.yml
       LOG_LEVEL: INFO
       HIGH_LATENCY_MS: "800"
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
+      TELEGRAM_STATUS_INTERVAL_SECONDS: "1800"
+      TELEGRAM_STATUS_TIME: "08:30"
+      TELEGRAM_TIMEZONE: "Asia/Jerusalem"
+      TELEGRAM_POLL_SECONDS: "3"
+
     restart: unless-stopped
 
   prometheus:
