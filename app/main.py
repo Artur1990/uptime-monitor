@@ -13,7 +13,7 @@ from app.telegram import send_telegram
 
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
-from app.telegram import send_telegram
+
 
 from app.telegram_bot import telegram_command_loop
 
