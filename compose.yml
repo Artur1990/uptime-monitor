@@ -7,6 +7,7 @@ services:
     environment:
       CONFIG_PATH: config/targets.yml
       LOG_LEVEL: INFO
+      HIGH_LATENCY_MS: "800"
     restart: unless-stopped
 
   prometheus:
