@@ -6,5 +6,5 @@ targets:
     url: https://www.google.com
   - name: github
     url: https://github.com
-  - name: movilit
-    url: https://platform.movilit.app
+  - name: test
+    url: https://testtesttest.com
