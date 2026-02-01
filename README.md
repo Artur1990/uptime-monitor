@@ -1,60 +1,86 @@
-# Uptime Monitor
-Lightweight uptime monitoring service built with Python, Docker, and GitHub Actions. The service periodically checks availability and latency of configured HTTP targets, exposes results via a REST API, and provides Prometheus-compatible metrics.
+# Uptime Monitor
+
+Lightweight uptime monitoring service built with Python and Docker.
+The service periodically checks availability and latency of HTTP targets,
+exposes results via an API, and provides Prometheus-compatible metrics.
+Targets can be managed via a CLI without editing configuration files manually.
 
 ## Features
 - Periodic HTTP checks for multiple targets
 - YAML-based configuration
-- REST API endpoints for health and results
+- CLI for managing monitored targets
+- REST API endpoints
 - Prometheus metrics endpoint (/metrics)
+- Structured JSON logging
 - Dockerized application
 - CI pipeline with linting, tests, and Docker build
+- Monitoring stack with Prometheus and Grafana
 
 ## Tech Stack
-- Python 3.11
+- Python 3
 - FastAPI
 - httpx
 - Docker & Docker Compose
 - GitHub Actions
-- Prometheus client
-- Ruff (linting)
-- Pytest (testing)
+- Prometheus
+- Grafana
+- Ruff
+- Pytest
 
 ## Project Structure
-app/            # Application code
-main.py         # FastAPI application & endpoints
-checker.py      # Background checker & metrics
-config.py       # Configuration loader
-config/         # YAML configuration
-tests/          # Unit tests
-.github/        # GitHub Actions workflows
-Dockerfile      # Docker image definition
-compose.yml     # Local container orchestration
-pytest.ini      # Pytest configuration
+app/            Application code  
+config/         YAML configuration  
+tests/          Unit tests  
+.github/        GitHub Actions workflows  
+Dockerfile      Docker image definition  
+compose.yml     Local container orchestration  
+prometheus.yml  Prometheus scrape configuration  
 
 ## Configuration
-Targets are defined in config/targets.yml:
-interval_seconds: 5
-timeout_seconds: 3
+Targets are stored in config/targets.yml.
+
+Example:
+interval_seconds: 5  
+timeout_seconds: 3  
+
 targets:
-- name: google
-  url: https://www.google.com
-- name: github
-  url: https://github.com
+- name: google  
+  url: https://www.google.com  
 
-## Run Locally (without Docker)
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload
+## Managing Targets via CLI
 
-## Run with Docker
+Targets can be added without editing YAML files directly.
+
+### Local usage
+python3 -m app.manage add --name facebook --url https://facebook.com
+
+### Using Docker
+docker compose run --rm uptime-monitor \
+  python -m app.manage add --name github --url https://github.com
+
+The configuration file is updated automatically, and the monitoring loop
+picks up new targets without restarting the service.
+
+## Running the Service
+
+Using Docker (recommended):
 docker compose up --build
-The service will be available at http://localhost:8000
+
+Services:
+- Uptime Monitor: http://localhost:8000
+- Prometheus: http://localhost:9090
+- Grafana: http://localhost:3000
 
 ## API Endpoints
-GET /health – returns service health status
-GET /results – returns latest check results for all targets
-GET /metrics – Prometheus-compatible metrics endpoint
+- GET /health  – service health status
+- GET /results – latest monitoring results
+- GET /metrics – Prometheus-compatible metrics
+
+## Monitoring and Observability
+- Prometheus scrapes metrics from /metrics
+- Grafana visualizes availability and latency
+- Logs are structured JSON and written to stdout
+- Only meaningful events are logged (state changes, high latency, errors)
 
 ## CI Pipeline
 On every push and pull request, GitHub Actions runs:
@@ -62,6 +88,9 @@ On every push and pull request, GitHub Actions runs:
 - unit tests with pytest
 - Docker image build
 
-## Notes
-This project is designed as a DevOps portfolio project and demonstrates clean project structure, containerization, CI automation, and basic monitoring and observability.
-
+## Purpose
+This project is designed as a DevOps portfolio project and demonstrates:
+- containerization
+- CI automation
+- observability with metrics and logs
+- configuration management via CLI
